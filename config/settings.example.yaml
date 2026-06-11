@@ -20,7 +20,10 @@ naver:
   active_hours: ["09:00", "22:00"]
 
 report:
-  kakao_send_time: "08:00"                  # 아침 보고 시각 (KST)
+  kakao_send_time: "10:00"                  # 아침 보고 시각 (KST), 주말 포함 매일
+
+comments:
+  auto_reply: "reaction_only"               # 호응성 댓글만 자동 답글. 문의성·민감성은 HOLD 후 아침 보고
 
 tone_guide: |
   # 사용자 말투 샘플 — 제목·본문·답글 생성과 검수(브랜드 톤 축)에 사용
