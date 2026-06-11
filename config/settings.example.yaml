@@ -1,6 +1,7 @@
 # 네이버 마스터 설정 템플릿
-# 실제 값을 채운 뒤 config/settings.yaml 로 복사해서 사용 (settings.yaml은 커밋 가능,
-# 키·토큰류는 전부 .env 로 분리)
+# 이 파일을 config/settings.yaml 로 복사해 실제 값을 채운다.
+# settings.yaml 은 개인 정보(채널 ID·말투 샘플)를 담으므로 gitignore 처리되어 있다.
+# 키·토큰류는 전부 .env 로 분리 (커밋 금지).
 
 youtube:
   channel_id: "UCxxxxxxxxxxxxxxxxxxxxxx"   # 사용자 유튜브 채널 ID
@@ -18,6 +19,11 @@ naver:
     replies_total: 30
   posting_windows: ["10:30", "15:30"]       # 기본 게시 시각 (지터 ±25분)
   active_hours: ["09:00", "22:00"]
+
+llm:
+  provider: "openai"
+  model: "gpt-5.1"                          # 분석·생성용 (비전 지원 모델이어야 함, 최신 모델로 조정 가능)
+  review_model: "gpt-5.1"                   # 검수용 (생성과 분리된 컨텍스트로 호출)
 
 report:
   kakao_send_time: "10:00"                  # 아침 보고 시각 (KST), 주말 포함 매일

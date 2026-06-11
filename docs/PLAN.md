@@ -26,7 +26,7 @@
 | 카톡 보고 | "나에게 보내기" REST API 정상 운영. 텍스트 200자 제한, refresh token 2개월(갱신 rotation 필요). 일 1건 발송은 무료 쿼터 내 | 보고 채널 채택. 일일 갱신 잡 + 갱신 실패 사전경고. 카카오 공식 PlayMCP(MemoChat)도 예비 경로 |
 | 유튜브 감지 | 채널 RSS(`youtube.com/feeds/videos.xml?channel_id=…`) 쿼터 0·키 불필요 | RSS 1시간 폴링 채택 (Data API playlistItems는 백업) |
 | 영상·자막 다운로드 | yt-dlp 활발 유지(2026-06 릴리스). 단 PO Token 단속 → bgutil-ytdlp-pot-provider 플러그인 + 본인 쿠키 필요. 자동생성 자막은 `--write-auto-subs` | yt-dlp 구성 채택. 실패 시 YouTube Studio 수동 다운로드 폴백 안내 |
-| 영상 이해 | — | ffmpeg 장면 추출 + 자막 → **Claude API(비전)** 로 상품·가격·포인트 분석 및 베스트 캡처 선정 |
+| 영상 이해 | — | ffmpeg 장면 추출 + 자막 → **OpenAI API(비전 모델)** 로 상품·가격·포인트 분석 및 베스트 캡처 선정 (총사령관 결정: OpenAI 키 사용) |
 
 ## 3. 아키텍처
 
@@ -36,8 +36,8 @@
 │  launchd 스케줄러                                                        │
 │    └─> 파이프라인 코어 (Python, src/)                                    │
 │         ├─ P1 watcher    : 유튜브 RSS 폴링, D+1 예약                     │
-│         ├─ P2 analyzer   : yt-dlp + ffmpeg + Claude API(비전·자막 분석)  │
-│         ├─ P3 writer     : Claude API — 제목·본문 생성 (카페/블로그 별)  │
+│         ├─ P2 analyzer   : yt-dlp + ffmpeg + OpenAI API(비전·자막 분석) │
+│         ├─ P3 writer     : OpenAI API — 제목·본문 생성 (카페/블로그 별) │
 │         ├─ P4 approver   : 자동승인 게이트 (룰 + LLM 검수)               │
 │         ├─ P7 reporter   : 카톡 '나에게 보내기' 아침 보고               │
 │         └─ 상태 저장     : SQLite (ops/state/naver_master.db)            │
@@ -68,7 +68,7 @@
 
 ### P2 분석 (analyzer) — 대장1 + 코어
 - yt-dlp(쿠키+POT 플러그인)로 영상·자막 다운로드 → ffmpeg 장면전환 기반 후보 프레임 30~60장 추출.
-- Claude API(비전)에 프레임+자막 투입 → 산출(JSON): 상품명, 핵심 셀링포인트 3~5개, 가격·구성·공구기간, 타임라인 요약, **포스팅용 베스트 캡처 6~10장 선정**(상품 클로즈업·사용 장면·가격 화면 우선).
+- OpenAI API(비전 모델)에 프레임+자막 투입 → 산출(JSON): 상품명, 핵심 셀링포인트 3~5개, 가격·구성·공구기간, 타임라인 요약, **포스팅용 베스트 캡처 6~10장 선정**(상품 클로즈업·사용 장면·가격 화면 우선).
 
 ### P3 생성 (writer) — 코어
 - 블로그용: 후킹 제목 후보 5개 + 본문(서론-포인트별 캡처 배치-가격/기간-구매링크-영상링크-광고고지) 1,200자 내외.
@@ -138,7 +138,7 @@ Phase 1을 거치는 이유: 자동승인 게이트가 사용자 기준과 일�
 - [ ] alfredo에서 naver-main 브라우저 프로필에 네이버 수동 로그인 1회 (로그인 유지 체크)
 - [ ] [developers.naver.com](https://developers.naver.com) 앱 등록 — 카페 API 권한 신청 시도 (결과에 따라 카페 게시 경로 확정)
 - [ ] [developers.kakao.com](https://developers.kakao.com) 앱 생성 — 카카오 로그인 + talk_message 동의 → 1회 OAuth 인증
-- [ ] Anthropic API 키 (영상 분석·본문 생성·검수용)
+- [ ] OpenAI API 키 (영상 분석·본문 생성·검수용 — 비전 지원 모델 필요)
 - [ ] 구매 링크 규칙 확정 (영상 설명란 고정 위치 권장)
 - [ ] 본인 말투 샘플 2~3개 → `config/settings.yaml`의 tone_guide
 - [ ] 코덱스 행동대장 6세션 구동 방식 공유 (각 세션에 상주 지시문을 넣을 수 있는지)

@@ -8,6 +8,9 @@ ops/state/tokens/
 ops/state/cookies/
 ops/state/naver_lock
 ops/state/PAUSE
+ops/state/logs/
+ops/state/heartbeat/
+config/settings.yaml
 
 # 미디어·임시 산출물
 ops/state/media/

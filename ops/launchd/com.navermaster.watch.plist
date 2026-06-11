@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.navermaster.watch</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>python3</string>
+        <string>-m</string>
+        <string>naver_master</string>
+        <string>watch</string>
+    </array>
+
+    <!-- __REPO__ 를 alfredo의 저장소 절대경로로 치환해 ~/Library/LaunchAgents/ 에 설치 -->
+    <key>WorkingDirectory</key>
+    <string>__REPO__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONPATH</key>
+        <string>__REPO__/src</string>
+    </dict>
+
+    <key>StartInterval</key>
+    <integer>3600</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>__REPO__/ops/state/logs/watch.log</string>
+    <key>StandardErrorPath</key>
+    <string>__REPO__/ops/state/logs/watch.err.log</string>
+</dict>
+</plist>
