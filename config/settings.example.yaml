@@ -1,0 +1,34 @@
+# 네이버 마스터 설정 템플릿
+# 실제 값을 채운 뒤 config/settings.yaml 로 복사해서 사용 (settings.yaml은 커밋 가능,
+# 키·토큰류는 전부 .env 로 분리)
+
+youtube:
+  channel_id: "UCxxxxxxxxxxxxxxxxxxxxxx"   # 사용자 유튜브 채널 ID
+  post_delay_hours: 24                      # 송출 후 D+1 게시
+  purchase_link_source: "description"      # 구매링크 출처: description(영상 설명란) | manual(별도 입력)
+
+naver:
+  blog_id: ""                               # blog.naver.com/{blog_id}
+  cafe:
+    club_url: ""                            # 게시할 카페 URL (본인 운영 카페)
+    menu_name: ""                           # 게시판 이름
+  daily_limits:
+    blog_posts: 2
+    cafe_posts: 2
+    replies_total: 30
+  posting_windows: ["10:30", "15:30"]       # 기본 게시 시각 (지터 ±25분)
+  active_hours: ["09:00", "22:00"]
+
+report:
+  kakao_send_time: "08:00"                  # 아침 보고 시각 (KST)
+
+tone_guide: |
+  # 사용자 말투 샘플 — 제목·본문·답글 생성과 검수(브랜드 톤 축)에 사용
+  # 예: 친근한 반말 금지, '~해요'체, 과장 없는 실사용 후기 톤 등
+  (여기에 사용자가 직접 쓴 글 샘플 2~3개를 붙여넣기)
+
+disclosure_text: "본 포스팅은 직접 기획한 공동구매 상품을 소개하는 광고성 게시물입니다."
+
+forbidden_words:
+  - "최저가 보장"
+  - "100% 효과"
