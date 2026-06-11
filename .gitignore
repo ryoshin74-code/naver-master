@@ -1,6 +1,7 @@
 # 비밀키·토큰·세션 — 절대 커밋 금지
 .env
 .env.*
+!.env.example
 config/secrets*
 ops/state/*.db
 ops/state/*.db-*
